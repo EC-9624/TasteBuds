@@ -24,6 +24,10 @@ function Home({ params }: { params: { store_id: string } }) {
   const [likeData, setLikeData] = useState<boolean>(true); // data toggle
   const [store_name, setstoreName] = useState<string>('');
 
+  const userinfo = await getUser(data?.user.id);
+  const userName = userinfo?.name;
+  const userImage = userinfo?.image;
+
   fetch(`/api/stores/${store_id}`)
     .then((response) => response.json())
     .then((data) => {
@@ -51,8 +55,8 @@ function Home({ params }: { params: { store_id: string } }) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     console.log('submit');
-    const user_name = data?.user.name;
-    const user_image = data?.user.image;
+    const user_name = userName;
+    const user_image = userImage;
     const user_id = data?.user.id;
     const like = likeData;
     const image = '';
@@ -80,6 +84,9 @@ function Home({ params }: { params: { store_id: string } }) {
       // Handle error
     }
   };
+
+
+
 
   return (
     <div className="flex min-h-full  flex-col justify-center items-start px-6 py-12 lg:px-8 ">
