@@ -1,28 +1,29 @@
-'use client';
-import React, { useState, ChangeEvent, FormEvent, useRef } from 'react';
-import { useSession } from 'next-auth/react';
-import Image from 'next/image';
-import { postReview } from '@/utils/reviews';
-import { addToLikes, removeFromKeeps } from '@/utils/user';
-import { reviewData } from '@/types/types';
-import { useRouter, redirect } from 'next/navigation';
+"use client";
+import React, { useState, ChangeEvent, FormEvent, useRef } from "react";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { postReview } from "@/utils/reviews";
+import { addToLikes, removeFromKeeps } from "@/utils/user";
+import { reviewData } from "@/types/types";
+import { useRouter, redirect } from "next/navigation";
+import { getUser } from "@/utils/user";
 
-function Home({ params }: { params: { store_id: string } }) {
+async function Home({ params }: { params: { store_id: string } }) {
   const router = useRouter();
   const { store_id } = params;
   const { data } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect('/login');
+      redirect("/login");
     },
   });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null); // Create a file input ref
 
-  const [reviewContent, setReviewContent] = useState<string>('');
-  const [toggleLike, setToggleLike] = useState<string>('like'); //btn toggle
+  const [reviewContent, setReviewContent] = useState<string>("");
+  const [toggleLike, setToggleLike] = useState<string>("like"); //btn toggle
   const [likeData, setLikeData] = useState<boolean>(true); // data toggle
-  const [store_name, setstoreName] = useState<string>('');
+  const [store_name, setstoreName] = useState<string>("");
 
   const userinfo = await getUser(data?.user.id);
   const userName = userinfo?.name;
@@ -37,12 +38,12 @@ function Home({ params }: { params: { store_id: string } }) {
     .catch((error) => console.error(error));
 
   const handleLikeButtonClick = () => {
-    setToggleLike('like');
+    setToggleLike("like");
     setLikeData(true);
   };
 
   const handleDislikeButtonClick = () => {
-    setToggleLike('dislike');
+    setToggleLike("dislike");
     setLikeData(false);
   };
 
@@ -54,22 +55,22 @@ function Home({ params }: { params: { store_id: string } }) {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log('submit');
+    console.log("submit");
     const user_name = userName;
     const user_image = userImage;
     const user_id = data?.user.id;
     const like = likeData;
-    const image = '';
+    const image = "";
     const comment = reviewContent;
     const imageFile = fileInputRef.current?.files?.[0] || null; // Access the file input ref to get the selected file
 
     const reviewData: reviewData = {
-      user_name: user_name || '',
-      user_img: user_image || '',
-      user_id: user_id || '',
+      user_name: user_name || "",
+      user_img: user_image || "",
+      user_id: user_id || "",
       like: like,
-      image: '', // Empty string for now, get the URL after uploading
-      comment: comment || '',
+      image: "", // Empty string for now, get the URL after uploading
+      comment: comment || "",
     };
 
     console.log(reviewData);
@@ -78,15 +79,12 @@ function Home({ params }: { params: { store_id: string } }) {
       const reviewId = await postReview(reviewData, store_id, imageFile);
       await addToLikes(user_id, store_id);
       await removeFromKeeps(user_id, store_id);
-      console.log('Review ID:', reviewId);
+      console.log("Review ID:", reviewId);
       router.push(`/stores/${store_id}`);
     } catch (error) {
       // Handle error
     }
   };
-
-
-
 
   return (
     <div className="flex min-h-full  flex-col justify-center items-start px-6 py-12 lg:px-8 ">
@@ -106,7 +104,7 @@ function Home({ params }: { params: { store_id: string } }) {
           <button
             type="button"
             className={`w-1/2  border-b-4 ${
-              toggleLike === 'like' ? 'border-orange-400' : 'border-none'
+              toggleLike === "like" ? "border-orange-400" : "border-none"
             } `}
             onClick={handleLikeButtonClick}
           >
@@ -115,7 +113,7 @@ function Home({ params }: { params: { store_id: string } }) {
           <button
             type="button"
             className={`w-1/2  border-b-4 ${
-              toggleLike === 'dislike' ? 'border-orange-400' : 'border-none'
+              toggleLike === "dislike" ? "border-orange-400" : "border-none"
             }`}
             onClick={handleDislikeButtonClick}
           >
