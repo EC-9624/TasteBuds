@@ -27,7 +27,7 @@ export default async function Page({ params }: PageProps) {
       <Header name="Store" />
       <section className="overflow-y-scroll h-screen overscroll-none pb-20">
         <HeaderCard
-          data={fetch(`http://localhost:3000/api/stores/${store_id}`)}
+          data={fetch(`https://taste-buds-iota.vercel.app/api/stores/${store_id}`)}
           ratio={ratio}
           reviewCount={reviewCount}
         />
