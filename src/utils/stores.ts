@@ -4,7 +4,7 @@ import { getUserKeeps, getUserReviewStoreId, getUserLikes } from '@/utils/user';
 //位置情報から店舗情報
 export const getStores = async ({ lng, lat }: Coords) => {
   const res = await fetch(
-    `http://localhost:3000/api/stores/?lng=${lng}&lat=${lat}`
+    `http://taste-buds-iota.vercel.app/api/stores/?lng=${lng}&lat=${lat}`
   );
   const data = await res.json();
   //console.log(data);
@@ -13,7 +13,7 @@ export const getStores = async ({ lng, lat }: Coords) => {
 
 // store_id から店舗情報
 export const getStore = async (store_id: string) => {
-  const res = await fetch(`http://localhost:3000/api/stores/${store_id}`);
+  const res = await fetch(`http://taste-buds-iota.vercel.app/api/stores/${store_id}`);
   const data = res.json();
   //console.log(data);
   return data;
@@ -28,7 +28,7 @@ export const getUserKeepStore = async (user_id: string) => {
       // Use Promise.all to await multiple asynchronous operations concurrently
       const storePromises = user_keeps.map(async (item: string) => {
         const response = await fetch(
-          `http://localhost:3000/api/stores/${item}`
+          `http://taste-buds-iota.vercel.app/api/stores/${item}`
         );
         const store = await response.json();
         //console.log(store);
@@ -55,7 +55,7 @@ export const getUserReviewStore = async (user_id: string) => {
       // Use Promise.all to await multiple asynchronous operations concurrently
       const storePromises = store_ids.map(async (item: string) => {
         const response = await fetch(
-          `http://localhost:3000/api/stores/${item}`
+          `http://taste-buds-iota.vercel.app/api/stores/${item}`
         );
         const store = await response.json();
         return store;
@@ -81,7 +81,7 @@ export const getUserLikesStore = async (user_id: string) => {
       // Use Promise.all to await multiple asynchronous operations concurrently
       const storePromises = store_ids.map(async (item: string) => {
         const response = await fetch(
-          `http://localhost:3000/api/stores/${item}`
+          `http://taste-buds-iota.vercel.app/api/stores/${item}`
         );
         const store = await response.json();
         return store;
