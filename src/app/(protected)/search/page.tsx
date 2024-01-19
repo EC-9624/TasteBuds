@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import FoodCard from './FoodCard';
 import Header from '@/app/components/HeaderBar';
-import Main from '../page';
+import { useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import SushiSvg from '@/assets/svg/sushi.svg';
 import FruitSandwichSvg from '@/assets/svg/fruit-sandwich.svg';
@@ -11,11 +12,16 @@ import Link from 'next/link';
 export default function Home() {
   // 食品ジャンルのデータを格納するための状態
   const [foodItems, setItems] = useState([]);
-
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect('/login');
+    },
+  });
   useEffect(() => {
     // APIからデータを非同期で取得する関数
     async function fetchData() {
-      const res = await fetch('http://localhost:3000/api/genre');
+      const res = await fetch('/api/genre');
       const data = await res.json();
       console.log(data);
       setItems(data);
@@ -298,15 +304,8 @@ export default function Home() {
       )}
 
       {/* フォーム追加 */}
-      <form action="" className="ml-2 mt-1 mb-1">
-        <input
-          type="text"
-          className="border-2 border-black"
-          placeholder="エリア検索"
-        />
-      </form>
 
-      <div className="shadow-md rounded-lg overflow-hidden flex items-center justify-center px-2 pb-20 ">
+      <div className="shadow-md rounded-lg overflow-hidden flex items-center justify-center px-2 pb-20 mt-2">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-1 mx-auto ">
           {foodItems.map((item: any, index) => (
             <FoodCard
