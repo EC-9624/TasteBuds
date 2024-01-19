@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, ChangeEvent, FormEvent, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  FormEvent,
+  useRef,
+} from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { postReview } from "@/utils/reviews";
@@ -8,7 +14,7 @@ import { reviewData } from "@/types/types";
 import { useRouter, redirect } from "next/navigation";
 import { getUser } from "@/utils/user";
 
-async function Home({ params }: { params: { store_id: string } }) {
+function Home({ params }: { params: { store_id: string } }) {
   const router = useRouter();
   const { store_id } = params;
   const { data } = useSession({
@@ -25,9 +31,22 @@ async function Home({ params }: { params: { store_id: string } }) {
   const [likeData, setLikeData] = useState<boolean>(true); // data toggle
   const [store_name, setstoreName] = useState<string>("");
 
-  const userinfo = await getUser(data?.user.id);
-  const userName = userinfo?.name;
-  const userImage = userinfo?.image;
+  const [user_data, setUserData] = useState({ name: "null", image: "null" });
+
+  const getUserParams = async () => {
+    return await getUser(data?.user.id);
+  };
+
+  useEffect(() => {
+    if (user_data.name == "null") {
+      getUserParams().then((e) => {
+        const name = e?.name;
+        const image = e?.image;
+        setUserData({ name: name, image: image });
+      });
+      console.log(user_data);
+    }
+  }, [user_data]);
 
   fetch(`/api/stores/${store_id}`)
     .then((response) => response.json())
@@ -56,8 +75,8 @@ async function Home({ params }: { params: { store_id: string } }) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     console.log("submit");
-    const user_name = userName;
-    const user_image = userImage;
+    const user_name = user_data.name;
+    const user_image = user_data.image;
     const user_id = data?.user.id;
     const like = likeData;
     const image = "";
@@ -94,10 +113,10 @@ async function Home({ params }: { params: { store_id: string } }) {
           width={120}
           height={120}
           className="mr-2 w-6 h-6 rounded-full"
-          src={data?.user.image}
+          src={user_data.image}
           alt="User Image"
         />
-        {data?.user.name}
+        {user_data.name}
       </p>
       <form>
         <div className="flex max-w-3xl w-full py-2">
