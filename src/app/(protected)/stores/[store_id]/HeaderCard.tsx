@@ -25,9 +25,12 @@ async function HeaderCard({
       <div className="p-4 max-w-xl w-full">
         <div className="flex justify-between ">
           <h3 className="text-xs h-6">{store.genre.name}</h3>
-          {reviewCount >= 10 ? <HotBadge /> : null}
+          <div>
+            {reviewCount >= 10 ? <HotBadge /> : null}
 
-          {ratio >= 80 ? <LikeBadge /> : null}
+            {ratio >= 80 ? <LikeBadge /> : null}  
+          </div>
+         
         </div>
         <h2 className=" text-lg font-bold text-gray-900 ">{store.name}</h2>
         <p className=" text-sm text-gray-700 py-1">{store.catch}</p>
