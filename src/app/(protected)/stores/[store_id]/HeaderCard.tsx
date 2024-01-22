@@ -25,7 +25,7 @@ async function HeaderCard({
       <div className="p-4 max-w-xl w-full">
         <div className="flex justify-between ">
           <h3 className="text-xs h-6">{store.genre.name}</h3>
-          <div>
+          <div className="flex gap-1">
             {reviewCount >= 10 ? <HotBadge /> : null}
 
             {ratio >= 80 ? <LikeBadge /> : null}  
