@@ -1,13 +1,4 @@
-## TasteBuds
+# TasteBuds
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Matching app X Gourmet
+Visit the live project: [TasteBuds Live](https://taste-buds-iota.vercel.app/)
